@@ -3,8 +3,148 @@
 <head>
     <meta charset="UTF-8">
     <title>Update Info</title>
+     <link rel="stylesheet" href='https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css' />
 </head>
 <body>
-    <h1>{{token}}</h1>
+ <div class="ui container">
+    <form class="ui form" method="post" >
+        {% csrf_token %}
+            <div class="five wide field" >
+                <label>Name:</label>
+                <input class="ui input focus" name="name" type="text" placeholder="Name">
+                    {% for error in form.name.errors %}
+                        <div class="ui up pointing label">
+                            <p>{{error}}</p>
+                        </div>
+                    {%endfor%}
+            </div>
+            <div class="five wide field">
+                <label>Email:</label>
+                <input class="ui input focus" name="email" type="text" placeholder="Email">
+                    {% for error in form.email.errors %}
+                        <div class="ui up pointing label">
+                            <p>{{error}}</p>
+                        </div>
+                    {%endfor%}
+            </div>
+            <div class="five wide field">
+                <label>Phone:</label>
+                <input class="ui input focus" name="phone" type="text" placeholder="Phone">
+                {% for error in form.phone.errors %}
+                    <div class="ui up pointing label">
+                        <p>{{error}}</p>
+                    </div>
+                {%endfor%}
+            </div>
+            <div class="five wide field">
+                <label>Address:</label>
+                <input class="ui input focus" name="address" type="text" placeholder="Address">
+                {% for error in form.address.errors %}
+                    <div class="ui up pointing label">
+                        <p>{{error}}</p>
+                    </div>
+                {%endfor%}
+            </div>
+            <div class="five wide field">
+                <label>Univeristy:</label>
+                <input class="ui input focus" name="university" type="text" placeholder="University">
+                {% for error in form.university.errors %}
+                    <div class="ui up pointing label">
+                        <p>{{error}}</p>
+                    </div>
+                {%endfor%}
+            </div>
+            <div class="five wide field">
+                <label>Graduation Year:</label>
+                <input class="ui input focus" name="gradYear" type="text" placeholder="Year Graduated">
+                {% for error in form.gradYear.errors %}
+                    <div class="ui up pointing label">
+                        <p>{{error}}</p>
+                    </div>
+                {%endfor%}
+            </div>
+            <div class="five wide field">
+                <label>CGPA:</label>
+                <input class="ui input focus" name="cgpa" type="number" step="0.01" placeholder="CGPA">
+                {% for error in form.cgpa.errors %}
+                    <div class="ui up pointing label">
+                        <p>{{error}}</p>
+                    </div>
+                {%endfor%}
+            </div>
+            <div class="five wide field">
+                <label>Experience(In month):</label>
+                <input class="ui input focus" name="experience" type="number" placeholder="Experience">
+                {% for error in form.experience.errors %}
+                    <div class="ui up pointing label">
+                        <p>{{error}}</p>
+                    </div>
+                {%endfor%}
+            </div>
+            <div class="five wide field">
+                <label>Current Work Place:</label>
+                <input class="ui input focus" name="currentWorkPlace" type="text" placeholder="current work place">
+                {% for error in form.currentWorkPlace.errors %}
+                    <div class="ui up pointing label">
+                        <p>{{error}}</p>
+                    </div>
+                {%endfor%}
+            </div>
+            <div class="five wide field">
+                <label>Applying In:</label>
+                  <div class="inline fields">
+                    <div class="five wide field">
+                      <div class="ui radio checkbox">
+                        <input type="radio" value="Mobile" name="appliedPosition">
+                        <label>Mobile</label>
+                      </div>
+                    </div>
+                    <div class=" five wide field">
+                      <div class="ui radio checkbox">
+                        <input type="radio" value="Backend" name="appliedPosition">
+                        <label>Backend</label>
+                      </div>
+                    </div>
+                {% for error in form.appliedPosition.errors %}
+                    <div class="ui left pointing label">
+                        <p>{{error}}</p>
+                    </div>
+                {%endfor%}
+            </div>
+            </div>
+            <div class="five wide field">
+                <label>Expected Salary:</label>
+                <input class="ui input focus" name="expectedSalary" type="number" placeholder="Expected Salary">
+                {% for error in form.expectedSalary.errors %}
+                    <div class="ui up pointing label">
+                        <p>{{error}}</p>
+                    </div>
+                {%endfor%}
+            </div>
+            <div class="five wide field">
+                <label>Field Buzz Reference:</label>
+                <input class="ui input focus" name="reference" type="text">
+                {% for error in form.reference.errors %}
+                    <div class="ui up pointing label">
+                        <p>{{error}}</p>
+                    </div>
+                {%endfor%}
+            </div>
+            <div class="five wide field">
+                <label>Github Project Link:</label>
+                <input class="ui input focus" name="projectLink" type="text">
+                {% for error in form.projectLink.errors %}
+                    <div class="ui up pointing label">
+                        <p>{{error}}</p>
+                    </div>
+                {%endfor%}
+            </div>
+{{confirmation}}
+            <div>
+                <button class="ui button primary" type="submit">Submit</button>
+            </div>
+
+    </form>
+ </div>
 </body>
 </html>

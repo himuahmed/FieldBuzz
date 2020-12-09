@@ -6,32 +6,33 @@
     <link rel="stylesheet" href='https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css' />
 </head>
 <body>
-<form method="post" >
-    {% csrf_token %}
-    <div class="ui container">
-        <div class="ui input focus row">
-            <input name="username" type="text" placeholder="username">
-                {% for error in form.username.errors %}
-                    <div class="ui left pointing label">
-                        <p>{{error}}</p>
-                    </div>
-                {%endfor%}
-        </div>
-        <div class="ui input focus">
-            <input name="password" type="password" placeholder="password">
+ <div class="ui container">
+    <form class="ui form" method="post" >
+        {% csrf_token %}
+            <div class="five wide field" >
+                <label>UserName:</label>
+                <input class="ui input focus" name="username" type="text" placeholder="username">
+                    {% for error in form.username.errors %}
+                        <div class="ui up pointing label">
+                            <p>{{error}}</p>
+                        </div>
+                    {%endfor%}
+            </div>
+            <div class="five wide field">
+                <label>Password:</label>
+                <input class="ui input focus" name="password" type="password" placeholder="password">
+                    {% for error in form.password.errors %}
+                        <div class="ui up pointing label">
+                            <p>{{error}}</p>
+                        </div>
+                    {%endfor%}
+            </div>
+                {{serverError}}
+            <div>
+                <button class="ui button primary" type="submit">Submit</button>
+            </div>
 
-                {% for error in form.password.errors %}
-                    <div class="ui left pointing label">
-                        <p>{{error}}</p>
-                    </div>
-                {%endfor%}
-
-        </div>
-        {{serverError}}
-        <div>
-            <button class="ui button primary" type="submit">Submit</button>
-        </div>
-</div>
-</form>
+    </form>
+ </div>
 </body>
 </html>
