@@ -50,9 +50,9 @@
             <div>
                 <label>Address:</label>
                 <div  class="ui input focus">
-                    <input name="address"  type="text" placeholder="Address">
+                    <input name="full_address"  type="text" placeholder="Address">
                 </div>
-                {% for error in form.address.errors %}
+                {% for error in form.full_address.errors %}
                     <div class="ui left pointing label">
                         <p>{{error}}</p>
                     </div>
@@ -61,9 +61,9 @@
             <div>
                 <label>Univeristy:</label>
                 <div  class="ui input focus">
-                    <input class="ui input focus" name="university" type="text" placeholder="University">
+                    <input class="ui input focus" name="name_of_university" type="text" placeholder="University">
                 </div>
-                {% for error in form.university.errors %}
+                {% for error in form.name_of_university.errors %}
                     <div class="ui left pointing label">
                         <p>{{error}}</p>
                     </div>
@@ -72,9 +72,9 @@
             <div>
                 <label>Graduation Year:</label>
                 <div  class="ui input focus">
-                    <input name="gradYear" type="text" placeholder="Year Graduated">
+                    <input name="graduation_year" type="text" placeholder="Year Graduated">
                 </div>
-                {% for error in form.gradYear.errors %}
+                {% for error in form.graduation_year.errors %}
                     <div class="ui left pointing label">
                         <p>{{error}}</p>
                     </div>
@@ -94,9 +94,9 @@
             <div>
                 <label>Experience(In month):</label>
                 <div class="ui input focus">
-                    <input  name="experience" type="number" placeholder="Experience">
+                    <input  name="experience_in_months" type="number" placeholder="Experience">
                 </div>
-                {% for error in form.experience.errors %}
+                {% for error in form.experience_in_months.errors %}
                     <div class="ui left pointing label">
                         <p>{{error}}</p>
                     </div>
@@ -105,10 +105,10 @@
             <div>
                 <label>Current Work Place:</label>
                 <div class="ui input focus">
-                    <input  name="currentWorkPlace" type="text" placeholder="current work place">
+                    <input  name="current_work_place_name" type="text" placeholder="current work place">
                 </div>
 
-                {% for error in form.currentWorkPlace.errors %}
+                {% for error in form.current_work_place_name.errors %}
                     <div class="ui left pointing label">
                         <p>{{error}}</p>
                     </div>
@@ -120,17 +120,17 @@
                       <label>Applying In:</label>
                     <div class="two wide field">
                       <div class="ui radio checkbox">
-                        <input type="radio" value="Mobile" name="appliedPosition">
+                        <input type="radio" value="Mobile" name="applying_in">
                         <label>Mobile</label>
                       </div>
                     </div>
                     <div class=" two wide field">
                       <div class="ui radio checkbox">
-                        <input type="radio" value="Backend" name="appliedPosition">
+                        <input type="radio" value="Backend" name="applying_in">
                         <label>Backend</label>
                       </div>
                     </div>
-                {% for error in form.appliedPosition.errors %}
+                {% for error in form.applying_in.errors %}
                     <div class="ui left pointing label">
                         <p>{{error}}</p>
                     </div>
@@ -140,10 +140,10 @@
             <div>
                 <label>Expected Salary:</label>
                 <div class="ui input focus">
-                    <input  name="expectedSalary" type="number" placeholder="Expected Salary">
+                    <input  name="expected_salary" type="number" placeholder="Expected Salary">
                 </div>
 
-                {% for error in form.expectedSalary.errors %}
+                {% for error in form.expected_salary.errors %}
                     <div class="ui left pointing label">
                         <p>{{error}}</p>
                     </div>
@@ -152,10 +152,10 @@
             <div>
                 <label>Field Buzz Reference:</label>
                 <div class="ui input focus">
-                    <input  name="reference" type="text">
+                    <input  name="field_buzz_reference" type="text">
                 </div>
 
-                {% for error in form.reference.errors %}
+                {% for error in form.field_buzz_reference.errors %}
                     <div class="ui left pointing label">
                         <p>{{error}}</p>
                     </div>
@@ -164,10 +164,10 @@
             <div>
                 <label>Github Project Link:</label>
                 <div class="ui input focus">
-                    <input  name="projectLink" type="text" placeholder="https://github.com/">
+                    <input  name="github_project_url" type="text" placeholder="https://github.com/">
                 </div>
 
-                {% for error in form.projectLink.errors %}
+                {% for error in form.github_project_url.errors %}
                     <div class="ui left pointing label">
                         <p>{{error}}</p>
                     </div>
