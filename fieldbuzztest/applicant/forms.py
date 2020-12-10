@@ -1,5 +1,6 @@
 from django import forms
 from django.core.validators import MinValueValidator, MaxValueValidator
+from rest_framework.exceptions import ValidationError
 
 
 class LoginForm(forms.Form):
@@ -31,18 +32,20 @@ class UserInfoForm(forms.Form):
     address = forms.CharField(max_length=512,required=False)
     university = forms.CharField(max_length=256)
     gradYear = forms.IntegerField(validators=[MinValueValidator(2015), MaxValueValidator(2020)])
-    cgpa = forms.FloatField(required=False)
-    experience = forms.IntegerField(required=False)
+    cgpa = forms.FloatField(validators=[MinValueValidator(2.0), MaxValueValidator(4.0)], required=False)
+    experience = forms.IntegerField(validators=[MinValueValidator(0), MaxValueValidator(100)],required=False)
     currentWorkPlace = forms.CharField(max_length=256,required=False)
     appliedPosition = forms.ChoiceField(choices=Position_Choices)
-    expectedSalary = forms.IntegerField()
+    expectedSalary = forms.IntegerField(validators=[MinValueValidator(15000), MaxValueValidator(60000)])
     reference = forms.CharField(max_length=256,required=False)
     projectLink = forms.CharField(max_length=512)
-    uploadCv = forms.FileField(widget=forms.FileInput(attrs={'accept': 'application/pdf'}))
+    uploadCv = forms.FileField(widget=forms.FileInput(attrs={'accept':'application/pdf'}))
 
-    def clean_name(self):
-        name = self.cleaned_data.get("name")
-        if not name:
-            raise forms.ValidationError('Enter your username please !')
-        return name
-
+    def clean_cv(self):
+        cvFile = self.cleaned_data.get('uploadCv')
+        if cvFile:
+            if cvFile.size>4194304:
+                raise ValidationError("File size exceeds 4MB.")
+            return cvFile
+        else:
+            raise ValidationError("Upload failed.")

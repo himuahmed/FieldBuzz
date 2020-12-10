@@ -48,22 +48,27 @@ def userInfo(request):
             reference = form.cleaned_data['reference']
             projectLink = form.cleaned_data['projectLink']
             timeNow = int(time.time()*1000)
-            cv = form.cleaned_data['uploadCv']
-            print(token)
-            print(tsyncId)
-            print(cvTsyncId)
-            cv = {'tsync_id': cvTsyncId}
-            ##cv_file = json.dumps((cv))
+            pdf_file = request.FILES['uploadCv'].file.getvalue()
+            file = {'file': pdf_file}
+
             data = {'tsync_id': tsyncId,'name': name, 'email': email, 'phone': phone, 'full_address': address, 'name_of_university':university,
                     'graduation_year': gradYear,'cgpa': cgpa, 'experience_in_months':experience,
                     'current_work_place_name':currentWorkPlace, 'applying_in': appliedPosition, 'expected_salary': expectedSalary,
                     'field_buzz_reference': reference, 'github_project_url':projectLink, 'cv_file': {'tsync_Id':cvTsyncId}, 'on_spot_creation_time': timeNow
                     }
             url = "https://recruitment.fisdev.com/api/v0/recruiting-entities/"
-            headers = {'content-type': 'application/json', 'Authorization': 'Token '+ token}
+            headers = {'content-type': 'application/json', 'Authorization': f'Token {token}'}
             response = requests.post(url, data=json.dumps(data), headers=headers)
-            data = response.json()
-            print(data['cv_file']['id'])
+            returnedData = response.json()
+
+            print(returnedData['cv_file']['id'])
+            if response.status_code == 201:
+                fileUploadUrl = f"https://recruitment.fisdev.com/api/file-object/{str(returnedData['cv_file']['id'])}/"
+                file_headers = {'Authorization': f'Token {token}'}
+                file_response = requests.patch(fileUploadUrl, files=file, headers=file_headers)
+                print(file_response.json())
+                print(file_response.status_code)
+
             return render(request, 'applicant/userInfo.html', {'confirmation': 'Succeded'})
     else:
         form = LoginForm()
