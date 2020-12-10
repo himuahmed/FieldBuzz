@@ -44,7 +44,11 @@
                     </div>
                 {%endfor%}
             </div>
-                {{serverError}}
+            {% if confirmation %}
+                <div class="ui message">
+                  <p>{{confirmation}}</p>
+                </div>
+            {% endif%}
             <div>
                 <button class="ui button primary" type="submit">Submit</button>
             </div>

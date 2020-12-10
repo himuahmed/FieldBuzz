@@ -1,5 +1,5 @@
 from django import forms
-from django.core.validators import MinValueValidator, MaxValueValidator
+from django.core.validators import MinValueValidator, MaxValueValidator, RegexValidator, FileExtensionValidator
 from rest_framework.exceptions import ValidationError
 
 
@@ -25,7 +25,7 @@ class UserInfoForm(forms.Form):
         ("Mobile", "Mobile"),
         ("Backend", "Backend"),
     )
-    token = forms.CharField(max_length=55)
+    github_validator = RegexValidator(r"github.com/", "Provide a valid github link.")
     name = forms.CharField(max_length=256,required=True)
     email = forms.EmailField(max_length=256)
     phone = forms.CharField(max_length=14)
@@ -38,14 +38,16 @@ class UserInfoForm(forms.Form):
     appliedPosition = forms.ChoiceField(choices=Position_Choices)
     expectedSalary = forms.IntegerField(validators=[MinValueValidator(15000), MaxValueValidator(60000)])
     reference = forms.CharField(max_length=256,required=False)
-    projectLink = forms.CharField(max_length=512)
-    uploadCv = forms.FileField(widget=forms.FileInput(attrs={'accept':'application/pdf'}))
+    projectLink = forms.CharField(max_length=512,validators=[github_validator])
+    uploadCv = forms.FileField(validators=[FileExtensionValidator(['pdf'])])
 
     def clean_cv(self):
         cvFile = self.cleaned_data.get('uploadCv')
         if cvFile:
-            if cvFile.size>4194304:
+            if cvFile.size > 4194304:
                 raise ValidationError("File size exceeds 4MB.")
             return cvFile
         else:
             raise ValidationError("Upload failed.")
+
+

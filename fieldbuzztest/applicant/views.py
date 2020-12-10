@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 import requests
 from .forms import LoginForm, UserInfoForm
 import json
@@ -17,10 +17,11 @@ def login(request):
             headers = {'content-type': 'application/json'}
             response = requests.post(url, data=json.dumps(data), headers=headers)
             data = response.json()
-            token = data['token']
             if response.status_code != 200:
-                return render(request, 'applicant/login.html', {'serverError': "Couldn't Sign In properly"})
-            return render(request, 'applicant/userinfo.html', {'token': token})
+                return render(request, 'applicant/login.html',  {'confirmation': 'Sign In failed. Try again !'})
+            token = data['token']
+            request.session['token'] = token
+            return redirect('updateinfo')
 
     else:
         form = LoginForm()
@@ -33,7 +34,7 @@ def userInfo(request):
         if form.is_valid():
             tsyncId = str(uuid.uuid4())
             cvTsyncId = str(uuid.uuid4())
-            token = form.cleaned_data['token']
+            token = request.session.get('token')
             name = form.cleaned_data['name']
             email = form.cleaned_data['email']
             phone = form.cleaned_data['phone']
@@ -51,25 +52,29 @@ def userInfo(request):
             pdf_file = request.FILES['uploadCv'].file.getvalue()
             file = {'file': pdf_file}
 
-            data = {'tsync_id': tsyncId,'name': name, 'email': email, 'phone': phone, 'full_address': address, 'name_of_university':university,
-                    'graduation_year': gradYear,'cgpa': cgpa, 'experience_in_months':experience,
-                    'current_work_place_name':currentWorkPlace, 'applying_in': appliedPosition, 'expected_salary': expectedSalary,
-                    'field_buzz_reference': reference, 'github_project_url':projectLink, 'cv_file': {'tsync_Id':cvTsyncId}, 'on_spot_creation_time': timeNow
+            ##Creating and uploading data to update userinfo
+            applicantData = {'tsync_id': tsyncId, 'name': name, 'email': email, 'phone': phone, 'full_address': address, 'name_of_university': university,
+                    'graduation_year': gradYear, 'cgpa': cgpa, 'experience_in_months':experience, 'current_work_place_name':currentWorkPlace,
+                    'applying_in': appliedPosition, 'expected_salary': expectedSalary,'field_buzz_reference': reference, 'github_project_url':projectLink,
+                    'cv_file': {'tsync_Id':cvTsyncId}, 'on_spot_creation_time': timeNow
                     }
             url = "https://recruitment.fisdev.com/api/v0/recruiting-entities/"
             headers = {'content-type': 'application/json', 'Authorization': f'Token {token}'}
-            response = requests.post(url, data=json.dumps(data), headers=headers)
+            response = requests.post(url, data=json.dumps(applicantData), headers=headers)
             returnedData = response.json()
-
-            print(returnedData['cv_file']['id'])
+            print(returnedData)
+            print(response.status_code)
+            ## If response status is 'created' then retrive the cv_id,tsync_id and upload cv file.
             if response.status_code == 201:
                 fileUploadUrl = f"https://recruitment.fisdev.com/api/file-object/{str(returnedData['cv_file']['id'])}/"
                 file_headers = {'Authorization': f'Token {token}'}
                 file_response = requests.patch(fileUploadUrl, files=file, headers=file_headers)
-                print(file_response.json())
-                print(file_response.status_code)
-
-            return render(request, 'applicant/userInfo.html', {'confirmation': 'Succeded'})
+                if file_response.status_code == 200:
+                    return render(request,'applicant/userInfo.html', {'confirmation': "Applican's info and CV uploaded successfully !"})
+                else:
+                    return render(request, 'applicant/userInfo.html', {'confirmation': "Couldn't upload CV"})
+            else:
+                return render(request, 'applicant/userInfo.html', {'confirmation': "Couldn't update information."})
     else:
         form = LoginForm()
-    return render(request, 'applicant/userInfo.html', {'form':form})
+    return render(request, 'applicant/userInfo.html', {'form': form})
