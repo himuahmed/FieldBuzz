@@ -3,6 +3,7 @@ import requests
 from .forms import LoginForm, UserInfoForm
 import json
 import uuid
+import time
 
 
 def login(request):
@@ -28,10 +29,11 @@ def login(request):
 
 def userInfo(request):
     if request.method == 'POST':
-        form = UserInfoForm(request.POST)
+        form = UserInfoForm(request.POST, request.FILES)
         if form.is_valid():
             tsyncId = str(uuid.uuid4())
             cvTsyncId = str(uuid.uuid4())
+            token = form.cleaned_data['token']
             name = form.cleaned_data['name']
             email = form.cleaned_data['email']
             phone = form.cleaned_data['phone']
@@ -45,6 +47,9 @@ def userInfo(request):
             expectedSalary = form.cleaned_data['expectedSalary']
             reference = form.cleaned_data['reference']
             projectLink = form.cleaned_data['projectLink']
+            timeNow = int(time.time()*1000)
+            cv = form.cleaned_data['uploadCv']
+            print(token)
             print(tsyncId)
             print(cvTsyncId)
             cv = {'tsync_id': cvTsyncId}
@@ -52,11 +57,14 @@ def userInfo(request):
             data = {'tsync_id': tsyncId,'name': name, 'email': email, 'phone': phone, 'full_address': address, 'name_of_university':university,
                     'graduation_year': gradYear,'cgpa': cgpa, 'experience_in_months':experience,
                     'current_work_place_name':currentWorkPlace, 'applying_in': appliedPosition, 'expected_salary': expectedSalary,
-                    'field_buzz_reference': reference, 'github_project_url':projectLink, 'cv_file': {'tsync_Id':cvTsyncId}
+                    'field_buzz_reference': reference, 'github_project_url':projectLink, 'cv_file': {'tsync_Id':cvTsyncId}, 'on_spot_creation_time': timeNow
                     }
-            print(json.dumps(data))
+            url = "https://recruitment.fisdev.com/api/v0/recruiting-entities/"
+            headers = {'content-type': 'application/json', 'Authorization': 'Token '+ token}
+            response = requests.post(url, data=json.dumps(data), headers=headers)
+            data = response.json()
+            print(data['cv_file']['id'])
             return render(request, 'applicant/userInfo.html', {'confirmation': 'Succeded'})
-
     else:
         form = LoginForm()
     return render(request, 'applicant/userInfo.html', {'form':form})

@@ -24,6 +24,7 @@ class UserInfoForm(forms.Form):
         ("Mobile", "Mobile"),
         ("Backend", "Backend"),
     )
+    token = forms.CharField(max_length=55)
     name = forms.CharField(max_length=256,required=True)
     email = forms.EmailField(max_length=256)
     phone = forms.CharField(max_length=14)
@@ -37,9 +38,11 @@ class UserInfoForm(forms.Form):
     expectedSalary = forms.IntegerField()
     reference = forms.CharField(max_length=256,required=False)
     projectLink = forms.CharField(max_length=512)
+    uploadCv = forms.FileField(widget=forms.FileInput(attrs={'accept': 'application/pdf'}))
 
     def clean_name(self):
         name = self.cleaned_data.get("name")
         if not name:
             raise forms.ValidationError('Enter your username please !')
         return name
+

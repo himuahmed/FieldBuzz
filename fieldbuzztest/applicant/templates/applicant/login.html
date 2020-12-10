@@ -4,28 +4,45 @@
     <meta charset="UTF-8">
     <title>log in</title>
     <link rel="stylesheet" href='https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css' />
+    <style>
+        .center-screen {
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: center;
+          text-align: center;
+          min-height: 100vh;
+        }
+        div {
+            padding: 5px;
+        }
+    </style>
 </head>
 <body>
- <div class="ui container">
+ <div class="center-screen">
     <form class="ui form" method="post" >
         {% csrf_token %}
-            <div class="five wide field" >
+            <div>
                 <label>UserName:</label>
-                <input class="ui input focus" name="username" type="text" placeholder="username">
-                    {% for error in form.username.errors %}
-                        <div class="ui up pointing label">
-                            <p>{{error}}</p>
-                        </div>
-                    {%endfor%}
+                <div  class="ui input focus">
+                    <input  name="username" type="text" placeholder="username">
+                </div>
+                {% for error in form.username.errors %}
+                    <div class="ui left pointing label">
+                        <p>{{error}}</p>
+                    </div>
+                {%endfor%}
             </div>
-            <div class="five wide field">
+            <div>
                 <label>Password:</label>
-                <input class="ui input focus" name="password" type="password" placeholder="password">
-                    {% for error in form.password.errors %}
-                        <div class="ui up pointing label">
-                            <p>{{error}}</p>
-                        </div>
-                    {%endfor%}
+                <div class="ui input focus">
+                    <input name="password" type="password" placeholder="password">
+                </div>
+                {% for error in form.password.errors %}
+                    <div class="ui left pointing label">
+                        <p>{{error}}</p>
+                    </div>
+                {%endfor%}
             </div>
                 {{serverError}}
             <div>
