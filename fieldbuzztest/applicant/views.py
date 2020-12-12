@@ -54,7 +54,7 @@ def userInfo(request):
             if response.status_code == 201:
                 fileUploadUrl = f"https://recruitment.fisdev.com/api/file-object/{str(returnedData['cv_file']['id'])}/"
                 file_headers = {'Authorization': f'Token {token}'}
-                file_response = requests.patch(fileUploadUrl, files=file, headers=file_headers)
+                file_response = requests.put(fileUploadUrl, files=file, headers=file_headers)
                 if file_response.status_code == 200:
                     return render(request, 'applicant/userInfo.html',
                                   {'confirmation': "Applicant's info and CV uploaded successfully !"})
